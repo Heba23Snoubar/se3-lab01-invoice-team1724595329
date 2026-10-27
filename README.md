@@ -5,10 +5,10 @@
 | الاسم الكامل             | الرقم الجامعي | GitHub Username                                   | الدور                             |
 | ------------------------ | ------------- | ------------------------------------------------- | --------------------------------- |
 | هبة الله محمد سمير سنوبر | 1724595329    | [Heba23Snoubar](https://github.com/Heba23Snoubar) | Lead , والتسليم                   |
-| عامر ابراهيم برهوق       | 1700004070    | [amerbarhouk] (https://github.com/amerbarhouk)    | النسخة القديمة                    |
-| خديحة بشار حسون          | 1722197130    | [**khadijheh**](https://github.com/khadijheh)     | UML,LCOM1                         |
-| هبة عبد الكريم عباس      | 1722204693    | Heba-Abbas                                        | البيانات والحساب والتنسيق والخدمة |
-| أحمد خيران خالد          | 1722204095    | ahmad-khaled-dev                                  | التخزين والإرسال والتجميع         |
+| عامر ابراهيم برهوق       | 1700004070    | [amerbarhouk](https://github.com/amerbarhouk)    | النسخة القديمة                    |
+| خديجة بشار حسون          | 1722197130    | [**khadijheh**](https://github.com/khadijheh)     | UML,LCOM1                         |
+| هبة عبد الكريم عباس      | 1722204693    | [Heba-Abbas](https://github.com/Heba-Abbas)                                        | البيانات والحساب والتنسيق والخدمة |
+| أحمد خيران خالد          | 1722204095    | [ahmad-khaled-dev](https://github.com/ahmad-khaled-dev)                                  | التخزين والإرسال والتجميع         |
 
 ## التشغيل
 

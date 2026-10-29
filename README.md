@@ -83,12 +83,64 @@
 - UML قبل إعادة الهيكلة: `docs/uml-before.png`
 - UML بعد إعادة الهيكلة: `docs/uml-after.png`
 
-## LCOM1
+## LCOM1: قبل وبعد
 
-| Class       |   Before |    After |
-| ----------- | -------: | -------: |
-| [اسم الصنف] | [القيمة] | [القيمة] |
+**القاعدة المعتمدة:** عدد أزواج الدوال التي لا تشترك في أي حقل كائن، مع استخدام مباشر للحقول فقط. لا يُحسب الـ constructor ولا الـ getters ولا الحقول static. الصنف بلا حقول كائن يُكتب له "لا ينطبق".
 
+| Class | Before | After |
+| --- | --- | --- |
+| Invoice | 6 | 0 |
+| InvoiceItem | 0 | 0 |
+| InvoiceCalculator | — | لا ينطبق (بلا حقول كائن) |
+| InvoiceFormatter | — | لا ينطبق (بلا حقول كائن) |
+| InvoiceStorage | — | لا ينطبق (واجهة) |
+| DatabaseStorage | — | لا ينطبق (الحقل static فقط) |
+| FileStorage | — | لا ينطبق (الحقل static فقط) |
+| InvoiceSender | — | لا ينطبق (واجهة) |
+| EmailSender | — | لا ينطبق (بلا حقول كائن) |
+| WhatsAppSender | — | لا ينطبق (بلا حقول كائن) |
+| InvoiceService | — | 3 |
+| Main | — | لا ينطبق (بلا حقول كائن) |
+
+### الصنفان `Invoice` و `InvoiceItem` بعد التعديل
+
+- `Invoice`: الدالة المحسوبة الوحيدة `addItem` (الباقي getters)، فلا أزواج، والقيمة 0.
+- `InvoiceItem`: constructor وgetters فقط، فلا دوال محسوبة، والقيمة 0.
+
+### حساب `InvoiceService`
+
+حقول الكائن: `calculator`, `formatter`, `storage`, `sender`. الدوال المحسوبة: 4، فعدد الأزواج 6.
+
+| الدالة | الحقول المستخدمة مباشرة |
+| --- | --- |
+| `calculateTotal` | calculator |
+| `printInvoice` | calculator, formatter |
+| `save` | calculator, formatter, storage |
+| `send` | sender |
+
+(`send` تستدعي `printInvoice` لكن الاستدعاء غير المباشر لا يُحسب.)
+
+| # | الزوج | حقل مشترك | يُحسب؟ |
+| --- | --- | --- | --- |
+| 1 | calculateTotal – printInvoice | calculator | لا |
+| 2 | calculateTotal – save | calculator | لا |
+| 3 | calculateTotal – send | — | **نعم** |
+| 4 | printInvoice – save | calculator, formatter | لا |
+| 5 | printInvoice – send | — | **نعم** |
+| 6 | save – send | — | **نعم** |
+
+**LCOM1 (InvoiceService) = 3**
+
+### المقارنة قبل وبعد
+
+| المقياس | قبل | بعد |
+| --- | --- | --- |
+| LCOM1 للصنف الرئيسي | 6 (`Invoice`) | 0 (`Invoice`) |
+| أعلى LCOM1 بين الأصناف | 6 | 3 (`InvoiceService`) |
+| مسؤوليات الصنف الرئيسي | 5 (بيانات، حساب، طباعة، تخزين، إرسال) | 1 لكل صنف |
+| عدد الأصناف | 2 (`Invoice`, `InvoiceItem`) + `Main` | 12 (منها واجهتان) |
+
+**ملاحظة:** `InvoiceService` قيمته 3 لا 0، لأن كل دالة فيه تستخدم اعتماديات مختلفة، وهذا متوقع في صنف يُنسّق الخطوات. التحسن الأساسي أن الحساب والتنسيق والتخزين والإرسال صارت بأصناف منفصلة، وأن `Invoice` لم يعد يحمل أياً منها.
 ## التحقق
 
 ملف التحقق: `docs/verification.pdf`

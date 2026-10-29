@@ -27,12 +27,13 @@ public class InvoiceService {
 
     public void save(Invoice invoice) {
         double total = calculator.calculateTotal(invoice);
-        storage.save(formatter.formatRecord(invoice, total));
+        storage.save(invoice,calculateTotal(invoice));
+    //     storage.save(formatter.formatRecord(invoice, total));
     }
 
 
     public String send(Invoice invoice) {
         String text = printInvoice(invoice);
-        return sender.send(invoice, text);
+        return sender.send(invoice.getNumber(),invoice.getCustomerEmail());
     }
 }

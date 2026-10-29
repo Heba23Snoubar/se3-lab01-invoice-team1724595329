@@ -2,7 +2,7 @@ package s1.lab2;
 
 import java.util.ArrayList;
 import java.util.List;
-
+ 
 public class DatabaseStorage implements IInvoiceStorage{
 
 
@@ -18,3 +18,4 @@ public class DatabaseStorage implements IInvoiceStorage{
     }
 
 }
+ 

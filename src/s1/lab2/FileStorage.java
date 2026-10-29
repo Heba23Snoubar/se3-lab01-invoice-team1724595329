@@ -1,5 +1,6 @@
 package s1.lab2;
 
+<<<<<<< HEAD
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,3 +20,16 @@ public class FileStorage implements IInvoiceStorage{
 
 
 }
+=======
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileStorage implements InvoiceStorage {
+    public static final List<String> FILES = new ArrayList<>();
+
+    @Override
+    public void save(String record) {
+        FILES.add(record);
+    }
+}
+>>>>>>> main

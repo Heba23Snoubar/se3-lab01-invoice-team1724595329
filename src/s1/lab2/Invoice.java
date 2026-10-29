@@ -1,20 +1,6 @@
 package s1.lab2;
 
-<<<<<<< HEAD
-public class Invoice {
 
-    public String number  ;
-    public String Email ;
-
-    public String number() {
-        return number;
-    }
-
-    public String customerEmail() {
-        return number;
-    }
-}
-=======
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,4 +22,3 @@ public class Invoice {
     public String getNumber()            { return number; }
     public String getCustomerEmail()     { return customerEmail; }
 }
->>>>>>> main

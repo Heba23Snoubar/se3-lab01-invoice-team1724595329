@@ -11,9 +11,9 @@ public class DatabaseStorage implements IInvoiceStorage{
     @Override
     public void Save(Invoice invoice, double total) {
 
-        DatabaseRows.add((invoice.number() +";" + invoice.customerEmail() +";" +total));
+        DatabaseRows.add((invoice.getNumber() +";" + invoice.getCustomerEmail() +";" +total));
     }
-    List<String> getRows(){
+   public    List<String> getRows(){
         return  DatabaseRows;
     }
 

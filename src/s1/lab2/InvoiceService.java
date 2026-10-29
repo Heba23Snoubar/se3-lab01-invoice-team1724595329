@@ -3,11 +3,11 @@ package s1.lab2;
 public class InvoiceService {
     private final InvoiceCalculator calculator;
     private final InvoiceFormatter formatter;
-    private final IInvoiceStorage storage;
-    private final IInvoiceSender sender;
+    private final InvoiceStorage storage;
+    private final InvoiceSender sender;
 
     public InvoiceService(InvoiceCalculator calculator, InvoiceFormatter formatter,
-                          IInvoiceStorage storage, IInvoiceSender sender) {
+                          InvoiceStorage storage, InvoiceSender sender) {
         this.calculator = calculator;
         this.formatter = formatter;
         this.storage = storage;
@@ -27,20 +27,12 @@ public class InvoiceService {
 
     public void save(Invoice invoice) {
         double total = calculator.calculateTotal(invoice);
-        storage.Save(invoice,calculateTotal(invoice));
+        storage.save(formatter.formatRecord(invoice, total));
     }
 
 
     public String send(Invoice invoice) {
         String text = printInvoice(invoice);
-        return sender.Send(invoice.getNumber(),invoice.getCustomerEmail());
-    }
-
-    String issue(Invoice invoice) {
-        double total = calculator.calculateTotal(invoice);
-        String text = formatter.formatInvoice(invoice, total);
-        storage.Save(invoice, total);
-        sender.Send(invoice.getCustomerEmail(), "Invoice " + invoice.getNumber());
-        return text;
+        return sender.send(invoice, text);
     }
 }

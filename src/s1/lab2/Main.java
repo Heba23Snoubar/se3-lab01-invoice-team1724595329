@@ -1,29 +1,50 @@
 package s1.lab2;
 
+import java.util.List;
+import java.util.Locale;
+
 public class Main {
 
     public static void main(String[] args) {
-        IInvoiceStorage repository = new FileStorage();
-        InvoiceService service = new InvoiceService(
-                new InvoiceCalculator(),
-                new InvoiceFormatter(),
-                repository,
-                new EmailSender());
+        InvoiceCalculator calculator = new InvoiceCalculator();
+        InvoiceFormatter formatter = new InvoiceFormatter();
 
-        Invoice small = new Invoice("INV-1un", "a@uni.edu");
-        small.addItem("Book", 100.0, 2);
-        small.addItem("Pen", 5.0, 10);
+        InvoiceStorage database = new DatabaseStorage();
+        InvoiceStorage files = new FileStorage();
 
+        InvoiceSender email = new EmailSender();
+        InvoiceSender whatsapp = new WhatsAppSender();
 
-        System.out.print(service.issue(small));
+        Invoice a = new Invoice("INV-1", "lina@uni.edu");
+        a.addItem("Book", 100, 2);
+        issue(a, new InvoiceService(calculator, formatter, database, email),
+                new InvoiceService(calculator, formatter, database, whatsapp),
+                "DATABASE", DatabaseStorage.DATABASE);
+        System.out.println("--------------------");
 
-        System.out.println("\n-- subtotal > 1000 (5% discount) --");
-        Invoice big = new Invoice("INV-2", "b@uni.edu");
-        big.addItem("Laptop", 1200.0, 1);
+        Invoice b = new Invoice("INV-2", "ahmad@uni.edu");
+        b.addItem("Laptop", 1200, 1);
+        issue(b, new InvoiceService(calculator, formatter, files, email),
+                new InvoiceService(calculator, formatter, files, whatsapp),
+                "FILES", FileStorage.FILES);
+        System.out.println("--------------------");
 
+        Invoice c = new Invoice("INV-3", "sara@uni.edu");
+        c.addItem("Monitor", 500, 2);
+        issue(c, new InvoiceService(calculator, formatter, database, email),
+                new InvoiceService(calculator, formatter, database, whatsapp),
+                "DATABASE", DatabaseStorage.DATABASE);
+    }
 
-        System.out.print(service.issue(big));
-
-        System.out.println("\nSTORED: " + repository.getRows());
+    private static void issue(Invoice invoice, InvoiceService viaEmail,
+                              InvoiceService viaWhatsapp,
+                              String label, List<String> content) {
+        viaEmail.printInvoice(invoice);
+        viaEmail.save(invoice);
+        System.out.println(label + ": " + content);
+        viaEmail.send(invoice);
+        viaWhatsapp.send(invoice);
+        System.out.println(String.format(Locale.US, "Final total: %.2f",
+                viaEmail.calculateTotal(invoice)));
     }
 }

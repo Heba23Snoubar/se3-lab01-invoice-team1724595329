@@ -1,6 +1,5 @@
 package s1.lab2;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

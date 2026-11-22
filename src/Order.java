@@ -36,6 +36,14 @@ public class Order {
     public int getId()        { return id; }
     public double getAmount() { return amount; }
 
+
+    public double processPayment() {
+        if (paymentStrategy == null) {
+            throw new IllegalStateException("Set a payment strategy before processing payment.");
+        }
+        return paymentStrategy.pay(amount);
+    }
+
     @Override
     public String toString() {
         return "Order #" + id + " | amount=" + amount + " | status=" + state.getName();

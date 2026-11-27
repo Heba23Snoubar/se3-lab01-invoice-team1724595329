@@ -1,0 +1,148 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+class Order {
+  -id : int
+  -amount : double
+  -state : OrderState
+  -paymentStrategy : PaymentStrategy
+  +setState(state : OrderState) : void
+  +setPaymentStrategy(s : PaymentStrategy) : void
+  +pay() : void
+  +ship() : void
+  +deliver() : void
+  +cancel() : void
+  +getStatusName() : String
+}
+
+package "State Pattern" <<Rectangle>> {
+  interface OrderState {
+    +pay(order : Order) : void
+    +ship(order : Order) : void
+    +deliver(order : Order) : void
+    +cancel(order : Order) : void
+    +getName() : String
+  }
+  class PendingState
+  class PaidState
+  class ShippedState
+  class DeliveredState
+  class CancelledState
+}
+
+package "Strategy Pattern" <<Rectangle>> {
+  interface PaymentStrategy {
+    +pay(amount : double) : double
+  }
+  class CardPayment {
+    -FEE_RATE : double {static}
+    +pay(amount : double) : double
+  }
+  class CashOnDelivery {
+    -DELIVERY_FEE : double {static}
+    +pay(amount : double) : double
+  }
+}
+
+package "Adapter Pattern" <<Rectangle>> {
+  class PayPalAdapter {
+    -CURRENCY : String {static}
+    -payPalLib : ExternalPayPalLib
+    +pay(amount : double) : double
+  }
+  class ExternalPayPalLib {
+    +makeTransaction(currency : String, value : double) : double
+  }
+}
+
+package "Facade Pattern" <<Rectangle>> {
+  class CheckoutFacade <<Facade>> {
+    -inventory : InventoryService
+    -shipping : ShippingService
+    -notification : NotificationService
+    +placeOrder(order : Order) : boolean
+  }
+  class InventoryService <<Subsystem>> {
+    -availableUnits : int
+    +reserve(order : Order) : boolean
+    +release(order : Order) : void
+  }
+  class ShippingService <<Subsystem>> {
+    +dispatch(order : Order) : void
+  }
+  class NotificationService <<Subsystem>> {
+    +notifyCustomer(order : Order, msg : String) : void
+  }
+}
+
+package "Decorator Pattern" <<Rectangle>> {
+  interface OrderService {
+    +createOrder(amount : double) : Order
+    +getOrder(id : int) : Order
+    +getOrderStatus(id : int) : String
+    +updateOrder(order : Order) : Order
+    +deleteOrder(id : int) : boolean
+  }
+  class BasicOrderService {
+    -orders : Map<Integer, Order>
+    -nextId : int
+    -copyOrder(source : Order) : Order
+  }
+  abstract class OrderServiceDecorator {
+    #wrappedService : OrderService
+  }
+  class LoggingOrderService {
+    -executeWithLogging(operation : String, action : Supplier) : T
+    -formatResult(result : Object) : String
+  }
+  class CachingOrderService {
+    -orderCache : Map<Integer, Order>
+    -statusCache : Map<Integer, String>
+    -invalidate(id : int) : boolean
+    -copyOrder(source : Order) : Order
+  }
+}
+
+' State
+Order o-- OrderState : state
+OrderState <|.. PendingState
+OrderState <|.. PaidState
+OrderState <|.. ShippedState
+OrderState <|.. DeliveredState
+OrderState <|.. CancelledState
+
+' Strategy + Adapter
+Order o-- PaymentStrategy : paymentStrategy
+PaymentStrategy <|.. CardPayment
+PaymentStrategy <|.. CashOnDelivery
+PaymentStrategy <|.. PayPalAdapter
+PayPalAdapter o-- ExternalPayPalLib : payPalLib
+
+' Facade
+CheckoutFacade o-- InventoryService : inventory
+CheckoutFacade o-- ShippingService : shipping
+CheckoutFacade o-- NotificationService : notification
+CheckoutFacade ..> Order : uses
+InventoryService ..> Order
+ShippingService ..> Order
+NotificationService ..> Order
+
+' Decorator
+OrderService <|.. BasicOrderService
+OrderService <|.. OrderServiceDecorator
+OrderServiceDecorator o-- OrderService : wrappedService
+OrderServiceDecorator <|-- LoggingOrderService
+OrderServiceDecorator <|-- CachingOrderService
+BasicOrderService ..> Order : creates
+
+' State transitions
+PendingState ..> PaidState : pay
+PendingState ..> CancelledState : cancel
+PaidState ..> ShippedState : ship
+PaidState ..> CancelledState : cancel
+ShippedState ..> DeliveredState : deliver
+PendingState ..> PaymentStrategy : uses
+OrderState ..> Order
+@enduml

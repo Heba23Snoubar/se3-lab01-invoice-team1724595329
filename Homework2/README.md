@@ -118,26 +118,24 @@ Goodbye!
 
 ### لقطات الشاشة
 
-**سيناريو ناجح، دفع بالبطاقة (Card):**
+***سيناريو ناجح، دفع بالبطاقة (Card):**
 
-![Card success](docs/screenshots/card_success.png)
+![Card 1](docs/screenshots/card_success1.png)
+![Card 2](docs/screenshots/card_success2.png)
+![Card 3](docs/screenshots/card_success3.png)
 
 **سيناريو ناجح، دفع عند الاستلام (Cash):**
 
-![Cash success](docs/screenshots/cash_success.png)
+![Cash 1](docs/screenshots/cash_success1.png)
+![Cash 2](docs/screenshots/cash_success2.png)
 
 **سيناريو ناجح، دفع عبر PayPal:**
 
-![PayPal success](docs/screenshots/paypal_success.png)
-
-**محاولة انتقال ممنوعة (State يرفضها):**
-
-![Forbidden transition](docs/screenshots/forbidden_transition.png)
-
+![PayPal 1](docs/screenshots/paypal_success1.png)
+![PayPal 2](docs/screenshots/paypal_success2.png)
 ## 5. أعضاء المجموعة
 
-**اسم المجموعة:** [املؤوا هنا]
-**رقم المجموعة:** [املؤوا هنا]
+
 
 | # | الاسم | الرقم الجامعي | مسؤولية في المشروع |
 | --- | --- | --- | --- |
